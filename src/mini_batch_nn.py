@@ -1,14 +1,6 @@
 import pandas as pd
 import numpy as np
 import math
-from sklearn.datasets import load_digits
-from sklearn.model_selection import train_test_split
-
-dig = load_digits()
-onehot_target = pd.get_dummies(dig.target)
-x_train, x_val, y_train, y_val = train_test_split(
-    dig.data, onehot_target, test_size=0.1, random_state=20)
-
 
 class NeuralNetwork:
     def __init__(self, learning_rate=0.5, momentum=0, epochs=10, batch_size=10):
@@ -21,6 +13,7 @@ class NeuralNetwork:
         self.momentum = momentum
         self.epochs = epochs
         self.batch_size = batch_size
+        self.errors = []
 
     def add_hidden_layer(self, num_neuron):
         self.layers_size.append(num_neuron)
@@ -118,22 +111,7 @@ class NeuralNetwork:
     def get_accuration(self, x, y):
         acc = 0
         for xx, yy in zip(x, y):
-            s = model.predict(xx)
+            s = self.predict(xx)
             if s == np.argmax(yy):
                 acc += 1
         return acc/len(x)*100
-
-
-epochs = 300
-learning_rate = 0.001
-momentum = 0.1
-batch_size = 15
-
-model = NeuralNetwork(epochs=epochs, learning_rate=learning_rate,
-                      momentum=momentum, batch_size=batch_size)
-model.add_hidden_layer(128)
-model.add_hidden_layer(128)
-model.train(x_train, y_train)
-
-print("Training accuracy : ", model.get_accuration(x_train/16, np.array(y_train)))
-print("Test accuracy : ", model.get_accuration(x_val/16, np.array(y_val)))
