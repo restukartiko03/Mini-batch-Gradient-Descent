@@ -44,7 +44,7 @@ def get_labels():
 
     return np.asarray(y_train), np.asarray(y_val)
 
-def plot_errors():
+def plot_errors(errors):
     plt.plot(errors)
     plt.ylabel('error')
     plt.xlabel('epoch')
@@ -52,7 +52,7 @@ def plot_errors():
 
 epochs = 100
 learning_rate = 0.001
-momentum = 1
+momentum = 0.1
 batch_size = 5
 x_train, x_val = get_data()
 y_train, y_val = get_labels()
@@ -64,4 +64,4 @@ model.train(x_train, y_train)
 
 print("Training accuracy : ", model.get_accuration(x_train, np.array(y_train)))
 print("Test accuracy : ", model.get_accuration(x_val, np.array(y_val)))
-# plot_errors()
+plot_errors(model.errors)

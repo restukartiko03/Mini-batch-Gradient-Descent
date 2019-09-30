@@ -92,6 +92,7 @@ class NeuralNetwork:
         for i in range(self.epochs):
             print("epoch: " + str(i))
 
+            err = 0
             for j in range(int(math.ceil(len(features) / self.batch_size))):  # numbers of batch
                 first_index = j*self.batch_size
                 batch = self.batch_size if len(
@@ -103,6 +104,10 @@ class NeuralNetwork:
                 self.feed_forward(np.array(data_train))
                 self.back_propagation(
                     np.array(data_train), np.array(label_train))
+                
+                err += self.error(self.activations[-1], np.array(label_train))
+            
+            self.errors.append(err/int(math.ceil(len(features) / self.batch_size)))
 
     def predict(self, data):
         self.feed_forward(data)
